@@ -26,12 +26,21 @@ function shuffle(array) {
 }
 function handleCardClick(event) {
     const card = event.target;
-    if (!card.classList.contains('card') || card.classList.contains('matched')) {
+
+    if (
+        !card.classList.contains('card') ||
+        card.classList.contains('matched') ||
+        selectedCards.includes(card) ||
+        selectedCards.length >= 2
+    ) {
         return;
     }
+
     card.textContent = card.dataset.color;
     card.style.backgroundColor = card.dataset.color;
+
     selectedCards.push(card);
+
     if (selectedCards.length === 2) {
         setTimeout(checkMatch, 500);
     }
@@ -43,7 +52,14 @@ function checkMatch() {
         card2.classList.add('matched');
         score += 2;
         scoreElement.textContent = `Score: ${score}`;
-    } else {
+    if (score === colors.length * 2) {
+    clearInterval(gameInterval);
+    alert('Congratulations Farnaz! You matched all the cards!');
+    startbtn.disabled = false;
+}
+    } 
+
+    else {
         card1.textContent = '?';
         card2.textContent = '?';
         card1.style.backgroundColor = '#ddd';
